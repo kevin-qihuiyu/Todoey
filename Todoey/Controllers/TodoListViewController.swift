@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
     
     var itemArray = [Item]()
     
@@ -27,6 +27,7 @@ class TodoListViewController: UITableViewController {
         super.viewDidLoad()
         
         print(dataFilePath)
+        
     }
 
     // MARK: - Tableview Datasource Methods
@@ -37,7 +38,7 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = itemArray[indexPath.row]
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = item.title
         cell.accessoryType = item.done ? .checkmark : .none
 
@@ -114,6 +115,12 @@ class TodoListViewController: UITableViewController {
             print("Error fetching data from context, \(error)")
         }
         tableView.reloadData()
+    }
+    
+    // MARK: - Delete Data From Swipe
+    override func updateModel(at indexPath: IndexPath) {
+        context.delete(itemArray[indexPath.row])
+        itemArray.remove(at: indexPath.row)
     }
 }
 
