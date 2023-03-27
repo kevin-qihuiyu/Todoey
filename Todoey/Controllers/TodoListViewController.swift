@@ -8,10 +8,12 @@
 
 import UIKit
 import CoreData
+import ChameleonFramework
 
 class TodoListViewController: SwipeTableViewController {
     
     var itemArray = [Item]()
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var selectedCategory : Category? {
         didSet{
@@ -25,9 +27,18 @@ class TodoListViewController: SwipeTableViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print(dataFilePath)
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let category = selectedCategory {
+            title = selectedCategory!.name
+            
+            let colorHex = category.color!
+            updateColor(UIColor(hexString: colorHex) ?? UIColor(hexString: "1D9BF6")!)
+            
+            searchBar.barTintColor = UIColor(hexString: colorHex)
+            searchBar.searchTextField.backgroundColor = FlatWhite()
+        }
     }
 
     // MARK: - Tableview Datasource Methods
@@ -41,7 +52,12 @@ class TodoListViewController: SwipeTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = item.title
         cell.accessoryType = item.done ? .checkmark : .none
-
+        if let parentColor = UIColor(hexString: item.parentCategory?.color ?? "63E6E2") {
+            let color = parentColor.darken(byPercentage: Double(indexPath.row)/Double(itemArray.count))
+            cell.backgroundColor = color
+            cell.textLabel?.textColor = ContrastColorOf(color!, returnFlat: true)
+        }
+        
         return cell
     }
     

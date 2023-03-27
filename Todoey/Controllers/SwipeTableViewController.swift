@@ -8,6 +8,7 @@
 
 import UIKit
 import SwipeCellKit
+import ChameleonFramework
 
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate {
 
@@ -50,6 +51,13 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     
     func updateModel(at indexPath: IndexPath) {
         // Update our data model
+    }
+    
+    func updateColor(_ backgroundColor: UIColor) {
+        guard let navBar = navigationController?.navigationBar else {fatalError("Navigation controller does not exist.")}
+        navBar.backgroundColor = backgroundColor
+        navBar.tintColor = ContrastColorOf(backgroundColor, returnFlat: true)
+        navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(backgroundColor, returnFlat: true)]
     }
 
 }
