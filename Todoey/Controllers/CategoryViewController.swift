@@ -103,6 +103,7 @@ class CategoryViewController: SwipeTableViewController {
     // MARK: - TableView Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToItems", sender: self)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
